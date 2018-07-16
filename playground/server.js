@@ -1,13 +1,13 @@
 const mongoose = require('mongoose')
 
 mongoose.Promise = global.Promise
-mongoose.connect('mongodb://localhost:27017/TodoApp')
+mongoose.connect('mongodb://localhost:27017/TestTodoApp')
 
 var Todo = mongoose.model('Todo', {
     text: {
         type: String,
-        require: true,
-        minlenth: 1,
+        required: true,
+        minlength: 1,
         trim: true
     },
     completed: {
@@ -26,10 +26,9 @@ var Todo = mongoose.model('Todo', {
 // })
 
 var newTodo = new Todo({
-    text: 'React course',
-
+    text : ''
 })
 
-newTodo.save().then(res => console.log('Todo is saved \n',
-                 JSON.stringify(res, undefined, 4)),
-                 err => console.log('Unable to saved'))
+newTodo.save()
+        .then(res => console.log('Todo is saved \n',res),
+                err => console.log('Unable to saved'))

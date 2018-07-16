@@ -10,12 +10,21 @@ var app = express()
 app.use(bodyParser.json())
 
 app.post('/todo', (req, res) => {
-    var todo = new Todo({
+  
+  var todo = new Todo({
         text : req.body.text
     })
 
     todo.save().then(doc => {
-        res.send(doc)
+        res.status(200).send(doc)
+    }, err => {
+        res.status(400).send(err)
+    })
+})
+
+app.get('/todo', (req, res) =>{
+    Todo.find().then(todo => {
+        res.send({todo})
     }, err => {
         res.status(400).send(err)
     })
@@ -24,3 +33,5 @@ app.post('/todo', (req, res) => {
 app.listen(3000, ()=> {
     console.log('Started on port 3000')
 })
+
+module.exports.app = app;

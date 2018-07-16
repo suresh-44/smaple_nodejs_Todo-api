@@ -3,9 +3,9 @@ const mongoose = require('mongoose')
 var Users = mongoose.model('users',{
     email : {
         type : String,
-        require : true,
+        required : true,
         trim  : true,
-        minlenth : 1
+        minlength : 1
     }
 })
 
