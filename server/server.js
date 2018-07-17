@@ -1,5 +1,6 @@
 const express =require('express')
 const bodyParser = require('body-parser') // it will cnver json into js object !@----it will parse the body that was send from client
+const {ObjectId} = require('mongodb')
 
 const {mongoose} = require('./db/mongoose')
 const {Todo} = require('./models/todo')
@@ -29,6 +30,22 @@ app.get('/todo', (req, res) =>{
     }, err => {
         res.status(400).send(err)
     })
+})
+
+app.get('/todo/:id', (req, res) => {
+    var id = req.params.id
+
+    if(!ObjectId.isValid(id)){
+        return res.status(404).send({})
+    }
+
+    Todo.findById(id).then(todo => {
+        if(!todo) {
+            res.status(404).send({})
+        }
+
+        res.send({todo})
+    }).catch(e => res.status(400).send({}))
 })
 
 app.listen(port, ()=> {
