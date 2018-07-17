@@ -36,16 +36,16 @@ app.get('/todo/:id', (req, res) => {
     var id = req.params.id
 
     if(!ObjectId.isValid(id)){
-        return res.status(404).send({})
+        return res.status(404).send()
     }
 
     Todo.findById(id).then(todo => {
         if(!todo) {
-            res.status(404).send({})
+            res.status(404).send()
         }
 
         res.send({todo})
-    }).catch(e => res.status(400).send({}))
+    }).catch(e => res.status(400).send())
 })
 
 app.listen(port, ()=> {
