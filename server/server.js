@@ -1,3 +1,5 @@
+require('./config/config')
+
 const _ = require('lodash')
 const express =require('express')
 const bodyParser = require('body-parser') // it will cnver json into js object !@----it will parse the body that was send from client
