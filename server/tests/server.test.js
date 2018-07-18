@@ -1,3 +1,7 @@
+/*=======================================
+      >npm run test-watch
+==========================================*/
+
 const expect = require('expect')
 const request = require('supertest')
 const {ObjectId} = require('mongodb')
@@ -98,6 +102,44 @@ describe('GET /todo/:id', () => {
   it('should return 404 non object ids', done => {
     request(app)
       .get('/todo/123456')
+      .expect(404)
+      .end(done)
+  })
+})
+
+describe('DELETE /todo/:id', () => {
+
+  it('should remove a todo' , done => {
+    const hexId = todo[0]._id.toHexString()
+    
+    request(app)
+      .delete(`/todo/${hexId}`)
+      .expect(200)
+      .expect(res => {
+        expect(res.body.todo.text).toBe(todo[0].text)
+      })
+      .end((err, res) => {
+        if(err){
+          return done(err)
+        }
+
+        Todo.findById(hexId).then(todo => {
+          expect(todo).toNotExist()
+          done()
+        }).catch(err => done(err))
+      })
+  })
+
+  it('should return 404 if todo not found' , done => {
+    request(app)
+      .delete(`/todo/${new ObjectId().toHexString()}`)
+      .expect(404)
+      .end(done)
+  })
+
+  it('should return 404 if object id id not valid', (done) => {
+    request(app)
+      .delete('/todo/123456789')
       .expect(404)
       .end(done)
   })
