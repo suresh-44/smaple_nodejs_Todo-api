@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const express =require('express')
 const bodyParser = require('body-parser') // it will cnver json into js object !@----it will parse the body that was send from client
 const {ObjectId} = require('mongodb')
@@ -63,8 +64,36 @@ app.delete('/todo/:id', (req, res) => {
     }).catch(err => res.status(400).send())
 })
 
+app.patch('/todo/:id', (req, res) => {
+    const id = req.params.id
+    const body = _.pick(req.body, ['text', 'completed'])
+
+    if(!ObjectId.isValid(id)) {
+        return res.status(404).send()
+    }
+
+    if(_.isBoolean(body.completed) && body.completed) {
+        body.completedAt = new Date().getTime()
+    } else {    
+        body.completed = false
+        body.completedAt = null
+    }
+
+    Todo.findByIdAndUpdate(id,
+                            {$set : body},
+                            {new: true})
+                            .then(todo=> {
+                                 if(!todo){
+                                    return res.status(404).send()
+                                 }
+
+                                 res.send({todo})
+                           })
+                           .catch(err => res.status(400).send(err))
+ })
+
 app.listen(port, ()=> {
     console.log(`Started up at the port ${port}`)
 })
 
-module.exports.app = app;
+module.exports.app = app
