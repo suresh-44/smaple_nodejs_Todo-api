@@ -112,8 +112,6 @@ app.patch('/todo/:id', (req, res) => {
    })
  })
 
- 
-
  app.get('/user/me',authenticate, (req, res) => {
     res.send(req.user)
  })
