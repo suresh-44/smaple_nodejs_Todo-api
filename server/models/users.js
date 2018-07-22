@@ -69,6 +69,25 @@ UserSchema.statics.findByToken = function(token){
     })
 }
 
+UserSchema.statics.findByCrendentials = function(email, password) {
+    var Users = this
+    return Users.findOne({email}).then(user => {
+        if(!user){
+            return Promise.reject()
+        }
+
+        return new Promise((resolve, reject) => {
+            bcrypt.compare(password, user.password, (err, res) => {
+                if(res){
+                    resolve(user)
+                }else {
+                    reject(err)
+                }
+            })
+        });
+    })
+}
+
 UserSchema.pre('save', function (next) {
     var user = this
 
@@ -83,6 +102,7 @@ UserSchema.pre('save', function (next) {
         next()
     }
 })
+
 
 var Users = mongoose.model('users', UserSchema)
 
