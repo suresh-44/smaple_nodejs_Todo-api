@@ -123,7 +123,18 @@ app.post('/user/login', (req, res) => {
         return user.generateAuthToken().then(token => {
             res.header('x-auth', token).send(user)
         })
-    }).catch(err => res.status(400).send(err))})
+    }).catch(err => res.status(400).send(err))
+  
+})
+
+app.delete('/user/me/token', authenticate, (req, res) => {
+    
+    req.user.removeToken(req.token).then(() => {
+        res.status(200).send()
+    }, () => {
+        res.status(400).send()
+    })
+})
 
 app.listen(port, ()=> {
     console.log(`Started up at the port ${port}`)
