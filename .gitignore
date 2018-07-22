@@ -1,1 +1,12 @@
 node_modules/
+server/config/config.json
+# {
+#   "test" : {
+#     "PORT" : "3000",
+#     "MONGODB_URI" : "mongodb://localhost:27017/TodoAppTest"
+#   },
+#   "development" : {
+#     "PORT" : "3000",
+#     "MONGODB_URI" : "mongodb://localhost:27017/TodoApp"
+#   }
+# }
